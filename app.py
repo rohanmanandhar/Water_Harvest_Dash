@@ -20,6 +20,7 @@ combined = harvest.merge(baseline, on="Land ID", suffixes=( "", "_B"))
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 
 app=Dash(__name__, external_stylesheets=[dbc.themes.CERULEAN, dbc_css])
+server = app.server
 
 load_figure_template("CERULEAN")
 
