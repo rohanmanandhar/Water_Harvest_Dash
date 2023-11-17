@@ -183,7 +183,7 @@ def update_figure1(district, age):
 
     
     # Calculate the maximum count of respondents
-    max_count = df.groupby(["Gender"]).size().max()
+    max_count = int(df.groupby(["Gender"]).size().max()) # make max_count variable int value
 
     # Calculate the step size based on the maximum count and the desired number of ticks
     step_size = max(1, max_count // 6)
