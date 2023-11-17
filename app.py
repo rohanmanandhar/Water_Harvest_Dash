@@ -415,6 +415,3 @@ def update_figure5(district, age):
 )
         
     return title, fig
-
-if __name__ == '__main__':
-    app.run_server(debug=True)
