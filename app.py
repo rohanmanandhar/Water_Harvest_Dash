@@ -1,4 +1,3 @@
-
 # import libraries required for dash app
 from dash import Dash, html, dcc
 from dash.dependencies import Input, Output
@@ -42,24 +41,24 @@ app.layout=dbc.Container([
                             className="dbc"
                         ),
 
-                        dcc.Markdown("**Select Age Range:**"),
-                        dcc.RangeSlider(
-                            id='slider',
-                            min = harvest.Age.min(),
-                            max = harvest.Age.max(),
-                            value = [],
-                            step=1,
-                            marks={int(harvest.Age.min()): str(harvest.Age.min()),
-                                    20: "20",
-                                    25: "25",
-                                    30: "30",
-                                    35: "35",
-                                    40: "40",
-                                    45: "45",
-                                    50: "50",
-                                    int(harvest.Age.max()): str(harvest.Age.max())},
-                            className="dbc"
-                        ),
+                        # dcc.Markdown("**Select Age Range:**"),
+                        # dcc.RangeSlider(
+                        #     id='slider',
+                        #     min = harvest.Age.min(),
+                        #     max = harvest.Age.max(),
+                        #     value = [],
+                        #     step=1,
+                        #     marks={int(harvest.Age.min()): str(harvest.Age.min()),
+                        #             20: "20",
+                        #             25: "25",
+                        #             30: "30",
+                        #             35: "35",
+                        #             40: "40",
+                        #             45: "45",
+                        #             50: "50",
+                        #             int(harvest.Age.max()): str(harvest.Age.max())},
+                        #     className="dbc"
+                        # ),
 
                     ])
                 ], width=4),
@@ -119,24 +118,24 @@ app.layout=dbc.Container([
                             className="dbc"
                         ),
 
-                        dcc.Markdown("**Select Age Range:**"),
-                        dcc.RangeSlider(
-                            id='slider_satisfaction',
-                            min = harvest.Age.min(),
-                            max = harvest.Age.max(),
-                            value = [],
-                            step=1,
-                            marks={harvest.Age.min(): str(harvest.Age.min()),
-                                   20: "20",
-                                   25: "25",
-                                    30: "30",
-                                    35: "35",
-                                    40: "40",
-                                    45: "45",
-                                    50: "50",
-                                   harvest.Age.max(): str(harvest.Age.max())},
-                            className="dbc"
-                        ),
+                        # dcc.Markdown("**Select Age Range:**"),
+                        # dcc.RangeSlider(
+                        #     id='slider_satisfaction',
+                        #     min = harvest.Age.min(),
+                        #     max = harvest.Age.max(),
+                        #     value = [],
+                        #     step=1,
+                        #     marks={harvest.Age.min(): str(harvest.Age.min()),
+                        #            20: "20",
+                        #            25: "25",
+                        #             30: "30",
+                        #             35: "35",
+                        #             40: "40",
+                        #             45: "45",
+                        #             50: "50",
+                        #            harvest.Age.max(): str(harvest.Age.max())},
+                        #     className="dbc"
+                        # ),
 
                     ])
                 ], width=4),
@@ -160,30 +159,30 @@ app.layout=dbc.Container([
         Output('map1_title', 'children'),
         Output('graph1', 'figure'),
         Input('dropdown', 'value'),
-        Input('slider', 'value')
+        # Input('slider', 'value')
 )
 
-def update_figure1(district, age): 
+def update_figure1(district): #removed age from the function
     
-    if not district and not age:
+    if not district:
         title = "Gender Distribution of All Respondents"
         df = harvest
 
-    elif district and not age:
+    else: # district and not age: # changed from elif to else
         title = f"Gender Distribution of Respondents in {district}"
         df = harvest.query('District in @district')
     
-    elif not district and age:
-        title = f"Gender Distribution of Respondents between age {age[0]} and {age[1]}"
-        df = harvest[harvest['Age'].between(age[0], age[1])]
+    # elif not district and age:
+    #     title = f"Gender Distribution of Respondents between age {age[0]} and {age[1]}"
+    #     df = harvest[harvest['Age'].between(age[0], age[1])]
     
-    else:
-        title = f"Gender Distribution of Respondents in {district} between age {age[0]} and {age[1]}"
-        df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
+    # else:
+    #     title = f"Gender Distribution of Respondents in {district} between age {age[0]} and {age[1]}"
+    #     df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
 
     
     # Calculate the maximum count of respondents
-    max_count = int(df.groupby(["Gender"]).size().max()) # make max_count variable int value
+    max_count = df.groupby(["Gender"]).size().max()
 
     # Calculate the step size based on the maximum count and the desired number of ticks
     step_size = max(1, max_count // 6)
@@ -299,30 +298,30 @@ def update_figure3(district, crop):
         Output('map4_title', 'children'),
         Output('graph4', 'figure'),
         Input('checklist_district_satisfaction', 'value'),
-        Input('slider_satisfaction', 'value')
+        # Input('slider_satisfaction', 'value')
 )
 
 
-def update_figure4(district, age): 
+def update_figure4(district): #removed age from the function
 
     # Replace 'F' and 'M' with 'Female' and 'Male'
     harvest['Gender'] = harvest['Gender'].replace({'F': 'Female', 'M': 'Male'})
     
-    if not district and not age:
+    if not district:
         title = "Overall Community Satisfaction Level by Gender"
         df = harvest
 
-    elif district and not age:
+    else: # district and not age:
         title = f"Community Satisfaction Level in {district}"
         df = harvest.query('District in @district')
     
-    elif not district and age:
-        title = f"Community Satisfaction Level of Respondents between age {age[0]} and {age[1]}"
-        df = harvest[harvest['Age'].between(age[0], age[1])]
+    # elif not district and age:
+    #     title = f"Community Satisfaction Level of Respondents between age {age[0]} and {age[1]}"
+    #     df = harvest[harvest['Age'].between(age[0], age[1])]
     
-    else:
-        title = f"Community Satisfaction Level of Respondents in {district} between age {age[0]} and {age[1]}"
-        df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
+    # else:
+    #     title = f"Community Satisfaction Level of Respondents in {district} between age {age[0]} and {age[1]}"
+    #     df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
    
 
     fig=px.bar(
@@ -360,30 +359,30 @@ def update_figure4(district, age):
         Output('map5_title', 'children'),
         Output('graph5', 'figure'),
         Input('checklist_district_satisfaction', 'value'),
-        Input('slider_satisfaction', 'value')
+        # Input('slider_satisfaction', 'value')
 )
 
 
-def update_figure5(district, age): 
+def update_figure5(district): #removed age from the function
 
     # Replace 'F' and 'M' with 'Female' and 'Male'
     harvest['Gender'] = harvest['Gender'].replace({'F': 'Female', 'M': 'Male'})
     
-    if not district and not age:
+    if not district:
         title = "Overall Impact Perception Level by Gender"
         df = harvest
 
-    elif district and not age:
+    else: # district and not age:
         title = f"Impact Perception Level in {district}"
         df = harvest.query('District in @district')
     
-    elif not district and age:
-        title = f"Impact Perception Level of Respondents between age {age[0]} and {age[1]}"
-        df = harvest[harvest['Age'].between(age[0], age[1])]
+    # elif not district and age:
+    #     title = f"Impact Perception Level of Respondents between age {age[0]} and {age[1]}"
+    #     df = harvest[harvest['Age'].between(age[0], age[1])]
     
-    else:
-        title = f"Impact Perception Level of Respondents in {district} between age {age[0]} and {age[1]}"
-        df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
+    # else:
+    #     title = f"Impact Perception Level of Respondents in {district} between age {age[0]} and {age[1]}"
+    #     df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
    
 
     fig=px.bar(
@@ -415,3 +414,6 @@ def update_figure5(district, age):
 )
         
     return title, fig
+
+# if __name__ == '__main__':
+#     app.run_server(debug=True)
