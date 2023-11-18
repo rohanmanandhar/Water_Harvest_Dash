@@ -163,6 +163,9 @@ app.layout=dbc.Container([
 )
 
 def update_figure1(district, age): #removed age from the function
+
+    # Replace 'F' and 'M' with 'Female' and 'Male'
+    harvest['Gender'] = harvest['Gender'].replace({'F': 'Female', 'M': 'Male'})
     
     if not district and not age:
         title = "Gender Distribution of All Respondents"
@@ -173,11 +176,11 @@ def update_figure1(district, age): #removed age from the function
         df = harvest.query('District in @district')
     
     elif not district and age:
-        title = f"Community Satisfaction Level of Respondents between age {age[0]} and {age[1]}"
+        title = f"Gender Distribution of Respondents between age {age[0]} and {age[1]}"
         df = harvest[harvest['Age'].between(age[0], age[1])]
     
     else:
-        title = f"Community Satisfaction Level of Respondents in {district} between age {age[0]} and {age[1]}"
+        title = f"Gender Distribution of Respondents in {district} between age {age[0]} and {age[1]}"
         df = harvest.query('District in @district').query('Age >= @age[0] and Age <= @age[1]')
 
     
@@ -198,16 +201,16 @@ def update_figure1(district, age): #removed age from the function
         ),
         x="Gender",
         y="count",
-    ).update_traces(
-        marker_color=['hotpink', 'cornflowerblue'], 
-        width=0.5).update_xaxes(
-        tickvals=[0, 1],
-        ticktext = ["Female", "Male"]
+        color = "Gender",
+        color_discrete_map={"Female": "hotpink", "Male": "cornflowerblue"}  # Add this line
+    ).update_traces( 
+        width=0.5
+    ).update_xaxes(
+        tickvals=[0, 1]
     ).update_yaxes(
         title_text = "Number of Respondents", 
         tickformat='d',
         tickvals=tickvals  # Add this line 
-              
     )
         
     return title, fig
