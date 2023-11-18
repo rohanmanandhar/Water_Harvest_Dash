@@ -363,7 +363,7 @@ def update_figure4(district, age): #removed age from the function
 )
 
 
-def update_figure5(district): #removed age from the function
+def update_figure5(district, age): #removed age from the function
 
     # Replace 'F' and 'M' with 'Female' and 'Male'
     harvest['Gender'] = harvest['Gender'].replace({'F': 'Female', 'M': 'Male'})
